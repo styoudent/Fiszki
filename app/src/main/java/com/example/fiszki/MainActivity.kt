@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
         bAddNewFlashcard.setOnClickListener {
             val flashcardTitle = etFlashcardTitle.text.toString()
             if (flashcardTitle.isNotEmpty()) {
-                val flashcard = Flashcard(flashcardTitle)
+                val flashcard = Flashcard(flashcardTitle, "")
                 flashcardAdapter.addNewFlashCard(flashcard)
                 etFlashcardTitle.text.clear()
             }
@@ -35,5 +35,23 @@ class MainActivity : ComponentActivity() {
         bDeleteFlashcards.setOnClickListener {
             flashcardAdapter.deleteFlashcards()
         }
+
+        val bTranslateFlashcards: Button = findViewById(R.id.bTranslateFlashcards)
+        val rvFlashcardsList: RecyclerView = findViewById(R.id.rvFlashcardsList)
+        var languageIndicator: Int = 0
+        bTranslateFlashcards.setOnClickListener {
+            for (position in 0 until flashcardAdapter.itemCount) {
+                val holder = rvFlashcardsList.findViewHolderForAdapterPosition(position)
+                        as FlashcardAdapter.FlashcardsHolder
+                if (languageIndicator == 0) {
+                    flashcardAdapter.translateFlashcards(holder, position, "en")
+                    languageIndicator = 1
+                } else {
+                    flashcardAdapter.translateFlashcards(holder, position, "pl")
+                    languageIndicator = 0
+                }
+            }
+        }
+
     }
 }

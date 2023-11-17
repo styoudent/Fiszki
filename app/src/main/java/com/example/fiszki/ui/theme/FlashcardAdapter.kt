@@ -8,6 +8,12 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fiszki.R
+import com.google.mlkit.common.model.DownloadConditions
+import com.google.mlkit.nl.translate.TranslateLanguage
+import com.google.mlkit.nl.translate.Translation
+import com.google.mlkit.nl.translate.Translator
+import com.google.mlkit.nl.translate.TranslatorOptions
+
 
 class FlashcardAdapter(
     private val flashcards: MutableList<Flashcard>
@@ -36,6 +42,34 @@ class FlashcardAdapter(
         notifyDataSetChanged()
     }
 
+    fun translateFlashcards(holder: FlashcardsHolder, position: Int, targetLanguage: String) {
+        val options = TranslatorOptions.Builder()
+            .setSourceLanguage(TranslateLanguage.POLISH)
+            .setTargetLanguage(targetLanguage) // Ustawianie docelowego języka
+            .build()
+        val translator: Translator = Translation.getClient(options)
+
+        var conditions = DownloadConditions.Builder()
+            .requireWifi()
+            .build()
+
+        translator.downloadModelIfNeeded(conditions)
+            .addOnSuccessListener {
+                val currFlashcard = flashcards[position]
+                val titleToTranslate: String = currFlashcard.title
+
+                translator.translate(titleToTranslate)
+                    .addOnSuccessListener { translatedText ->
+                        currFlashcard.translation = translatedText
+
+                        holder.itemView.apply {
+                            val tvFlashcardTitle: TextView = findViewById(R.id.tvFlashcardTitle)
+                            tvFlashcardTitle.text = translatedText
+                        }
+                    }
+            }
+    }
+
     private fun toggleStrikeThrough(tvFlashcardTitle: TextView, isChecked: Boolean) {
         if (isChecked) {
             tvFlashcardTitle.paintFlags = tvFlashcardTitle.paintFlags or STRIKE_THRU_TEXT_FLAG
@@ -49,17 +83,16 @@ class FlashcardAdapter(
         val currFlashcard = flashcards[position]
         holder.itemView.apply {
             val tvFlashcardTitle: TextView = findViewById(R.id.tvFlashcardTitle)
-            val cbToTranslate: CheckBox = findViewById(R.id.cbToTranslate)
+            val cbToDelete: CheckBox = findViewById(R.id.cbToTranslate)
             tvFlashcardTitle.text = currFlashcard.title
-            cbToTranslate.isChecked = currFlashcard.isChecked
+            cbToDelete.isChecked = currFlashcard.isChecked
             toggleStrikeThrough(tvFlashcardTitle, currFlashcard.isChecked)
-            cbToTranslate.setOnCheckedChangeListener { _, isChecked ->
+            cbToDelete.setOnCheckedChangeListener { _, isChecked ->
                 toggleStrikeThrough(tvFlashcardTitle, isChecked)
                 currFlashcard.isChecked = !currFlashcard.isChecked
             }
         }
     }
-
 
     override fun getItemCount(): Int {
         return flashcards.size

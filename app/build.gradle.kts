@@ -65,4 +65,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     implementation("com.google.android.material:material:1.12.0-alpha01")
+    implementation("com.google.mlkit:translate:17.0.2")
+    implementation("com.google.android.material:material:latest_version")
+    implementation("com.google.android.material:material:1.10.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
 }
