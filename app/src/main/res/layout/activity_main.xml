@@ -19,11 +19,11 @@
         android:layout_height="wrap_content"
         android:hint="Enter Flashcard's title"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/bAddFlashcard"
+        app:layout_constraintEnd_toStartOf="@+id/bAddNewFlashcard"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/bAddFlashcard"
+        android:id="@+id/bAddNewFlashcard"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:text="Add new"
@@ -43,6 +43,6 @@
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:text="Translate"
-        app:layout_constraintBottom_toTopOf="@+id/bAddFlashcard"
+        app:layout_constraintBottom_toTopOf="@+id/bAddNewFlashcard"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

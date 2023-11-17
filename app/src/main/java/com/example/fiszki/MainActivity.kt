@@ -1,43 +1,39 @@
 package com.example.fiszki
 
 import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.fiszki.ui.theme.FiszkiTheme
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.fiszki.ui.theme.Flashcard
+import com.example.fiszki.ui.theme.FlashcardAdapter
 
 class MainActivity : ComponentActivity() {
+    private lateinit var flashcardAdapter: FlashcardAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            FiszkiTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Greeting("Android")
-                }
+        setContentView(R.layout.activity_main)
+        flashcardAdapter = FlashcardAdapter(mutableListOf())
+
+        val rvFlashcardList: RecyclerView = findViewById(R.id.rvFlashcardsList)
+        rvFlashcardList.adapter = flashcardAdapter
+        rvFlashcardList.layoutManager = LinearLayoutManager(this)
+
+        val bAddNewFlashcard: Button = findViewById(R.id.bAddNewFlashcard)
+        val etFlashcardTitle: EditText = findViewById(R.id.etFlashcardTitle)
+        bAddNewFlashcard.setOnClickListener {
+            val flashcardTitle = etFlashcardTitle.text.toString()
+            if (flashcardTitle.isNotEmpty()) {
+                val flashcard = Flashcard(flashcardTitle)
+                flashcardAdapter.addNewFlashCard(flashcard)
+                etFlashcardTitle.text.clear()
             }
         }
-    }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-            text = "Hello $name!",
-            modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FiszkiTheme {
-        Greeting("Android")
+        val bDeleteFlashcards: Button = findViewById(R.id.bDeleteFlashcards)
+        bDeleteFlashcards.setOnClickListener {
+            flashcardAdapter.deleteFlashcards()
+        }
     }
 }

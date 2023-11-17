@@ -29,7 +29,7 @@ class FlashcardAdapter(
         notifyItemInserted(flashcards.size - 1)
     }
 
-    fun deleteFlashcard(flashcard: Flashcard) {
+    fun deleteFlashcards() {
         flashcards.removeAll { flashcard: Flashcard ->
             flashcard.isChecked
         }
