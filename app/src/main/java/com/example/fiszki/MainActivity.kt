@@ -38,18 +38,21 @@ class MainActivity : ComponentActivity() {
 
         val bTranslateFlashcards: Button = findViewById(R.id.bTranslateFlashcards)
         val rvFlashcardsList: RecyclerView = findViewById(R.id.rvFlashcardsList)
-        var languageIndicator: Int = 0
+        var languageIndicator = 0
         bTranslateFlashcards.setOnClickListener {
             for (position in 0 until flashcardAdapter.itemCount) {
                 val holder = rvFlashcardsList.findViewHolderForAdapterPosition(position)
                         as FlashcardAdapter.FlashcardsHolder
                 if (languageIndicator == 0) {
                     flashcardAdapter.translateFlashcards(holder, position, "en")
-                    languageIndicator = 1
                 } else {
                     flashcardAdapter.translateFlashcards(holder, position, "pl")
-                    languageIndicator = 0
                 }
+            }
+            languageIndicator = if (languageIndicator == 1) {
+                0
+            } else {
+                1
             }
         }
 
